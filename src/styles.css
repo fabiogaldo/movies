@@ -1,0 +1,46 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  margin: 0;
+}
+
+.movies-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding: 15px;
+}
+
+.movie-item {
+  position: relative;
+}
+
+.movie-item-header {
+  position: relative;
+}
+
+.movie-item__poster {
+  display: block;
+}
+
+.movie-item__title {
+  font-size: 1.3em;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.movie-item__badge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1;
+  background-color: #e60b1c;
+  padding: 7px 10px;
+  white-space: nowrap;
+}
