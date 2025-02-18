@@ -1,6 +1,20 @@
 const assetsUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face/";
 
-export default function MovieItem({ movie }) {
+import React from "react";
+
+interface Movie {
+  poster_path?: string;
+  featured?: boolean;
+  title?: string;
+}
+
+interface MovieItemProps {
+  movie: Movie;
+  poster_path?: string;
+  featured?: boolean;
+}
+
+export default function MovieItem({ movie }: MovieItemProps) {
   return (
     <div className="movie-item">
       <header className="movie-item-header">
