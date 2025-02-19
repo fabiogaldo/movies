@@ -1,17 +1,11 @@
 const assetsUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face/";
 
-import React from "react";
-
-interface Movie {
-  poster_path?: string;
-  featured?: boolean;
-  title?: string;
-}
-
 interface MovieItemProps {
-  movie: Movie;
-  poster_path?: string;
-  featured?: boolean;
+  movie: {
+    poster_path: string;
+    featured?: boolean;
+    title: string;
+  };
 }
 
 export default function MovieItem({ movie }: MovieItemProps) {
