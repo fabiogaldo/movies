@@ -1,10 +1,13 @@
 import "./styles.css";
 import MoviesList from "./MoviesList";
+import Header from "./Header";
+import movies from "./data/popular.json";
 
 export default function App() {
   return (
     <div className="App">
-      <MoviesList></MoviesList>
+      <Header />
+      <MoviesList movies={movies} />
     </div>
   );
 }

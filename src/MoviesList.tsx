@@ -1,7 +1,11 @@
 import MovieItem from "./MovieItem";
-import movies from "./data/popular.json";
 
-export default function MoviesList() {
+interface MovieListProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  movies: any[];
+}
+
+export default function MoviesList({ movies }: MovieListProps) {
   const moviesItems = movies.map((movie) => (
     <MovieItem key={movie.id} movie={movie} />
   ));
