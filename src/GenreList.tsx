@@ -3,6 +3,14 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 
 interface Genre {
   id: number;
@@ -11,7 +19,7 @@ interface Genre {
 
 const fetchGenres = async () => {
   const { data } = await axios.get("http://localhost:8000/genres");
-  return data; // Ajuste conforme a estrutura dos dados retornados
+  return data;
 };
 
 const GenresList = ({
@@ -30,26 +38,26 @@ const GenresList = ({
     queryFn: fetchGenres,
   });
 
-  if (isLoading) return <p>Loading genres...</p>;
-  if (error) return <p>Error loading genres</p>;
+  if (isLoading) return <CircularProgress />;
+  if (error) return <Typography color="error">Error loading genres</Typography>;
 
   return (
-    <div>
-      <select
+    <FormControl fullWidth>
+      <InputLabel>Genre</InputLabel>
+      <Select
         value={selectedGenre !== null ? selectedGenre : ""}
         onChange={(e) =>
           onGenreChange(e.target.value ? Number(e.target.value) : null)
-        }>
-        <option value="">All Genres</option>
-        {(genres as Genre[]).map((genre: Genre) => {
-          return (
-            <option key={genre.id} value={genre.id}>
-              {genre.name}
-            </option>
-          );
-        })}
-      </select>
-    </div>
+        }
+        label="Genre">
+        <MenuItem value="">All Genres</MenuItem>
+        {genres.map((genre: Genre) => (
+          <MenuItem key={genre.id} value={genre.id}>
+            {genre.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 

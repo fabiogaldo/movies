@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
+import { Grid } from "@mui/material";
 import MovieItem from "./MovieItem";
 
-interface MovieListProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  movies: any[];
-}
+const MoviesList = ({ movies }: { movies: any[] }) => {
+  return (
+    <Grid container spacing={4}>
+      {movies.map((movie) => (
+        <Grid item key={movie.id} xs={12} sm={6} md={4}>
+          <MovieItem movie={movie} />
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
 
-export default function MoviesList({ movies }: MovieListProps) {
-  const moviesItems = movies.map((movie) => (
-    <MovieItem key={movie.id} movie={movie} />
-  ));
-
-  return <div className="movies-list">{moviesItems}</div>;
-}
+export default MoviesList;

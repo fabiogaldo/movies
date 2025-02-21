@@ -3,7 +3,7 @@ import "./styles.css";
 import MoviesList from "./MoviesList";
 import Header from "./Header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import { Container } from "@mui/material";
 interface Movie {
   id: number;
   title: string;
@@ -18,10 +18,10 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="App">
+      <Container>
         <Header setMovies={setMovies} />
         <MoviesList movies={movies} />
-      </div>
+      </Container>
     </QueryClientProvider>
   );
 }

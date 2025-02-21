@@ -4,52 +4,57 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import GenresList from "./GenreList";
+import {
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
+
+const fetchMovies = async (): Promise<any[]> => {
+  const { data } = await axios.get<any[]>(`http://localhost:8001/movies`);
+  return data;
+};
 
 const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
+  const [allMovies, setAllMovies] = useState<any[]>([]);
 
-  const fetchMovies = async () => {
-    const { data } = await axios.get(`http://localhost:8001/movies`);
-    setMovies(data);
-    return data;
-  };
-
-  const {
-    data: allMovies,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["movies"],
     queryFn: fetchMovies,
   });
 
   useEffect(() => {
-    if (allMovies) {
-      let filteredMovies = allMovies;
-
-      if (searchTerm) {
-        filteredMovies = filteredMovies.filter((movie: { title: string }) =>
-          movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-
-      if (isFeatured) {
-        filteredMovies = filteredMovies.filter(
-          (movie: { featured: boolean }) => movie.featured
-        );
-      }
-
-      if (selectedGenre !== null) {
-        filteredMovies = filteredMovies.filter(
-          (movie: { genre_ids: number[] }) =>
-            movie.genre_ids.includes(selectedGenre)
-        );
-      }
-
-      setMovies(filteredMovies);
+    if (data) {
+      setAllMovies(data);
+      setMovies(data);
     }
+  }, [data, setMovies]);
+
+  useEffect(() => {
+    let filteredMovies = allMovies;
+
+    if (searchTerm) {
+      filteredMovies = filteredMovies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (isFeatured) {
+      filteredMovies = filteredMovies.filter((movie) => movie.featured);
+    }
+
+    if (selectedGenre !== null) {
+      filteredMovies = filteredMovies.filter((movie) =>
+        movie.genre_ids.includes(selectedGenre)
+      );
+    }
+
+    setMovies(filteredMovies);
   }, [searchTerm, isFeatured, selectedGenre, allMovies, setMovies]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,28 +71,25 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
 
   return (
     <header className="header">
-      <input
-        type="text"
-        placeholder="Search by title"
+      <TextField
+        label="Search by title"
         value={searchTerm}
         onChange={handleSearchChange}
-        style={{ padding: "5px", marginRight: "10px" }}
+        variant="outlined"
+        style={{ marginRight: "10px" }}
       />
-      <label>
-        Featured:
-        <input
-          type="checkbox"
-          checked={isFeatured}
-          onChange={handleFeaturedChange}
-          style={{ marginLeft: "5px" }}
-        />
-      </label>
+      <FormControlLabel
+        control={
+          <Checkbox checked={isFeatured} onChange={handleFeaturedChange} />
+        }
+        label="Featured"
+      />
       <GenresList
         selectedGenre={selectedGenre}
         onGenreChange={handleGenreChange}
       />
-      {isLoading && <p>Loading movies...</p>}
-      {error && <p>Error loading movies</p>}
+      {isLoading && <CircularProgress />}
+      {error && <Typography color="error">Error loading movies</Typography>}
     </header>
   );
 };

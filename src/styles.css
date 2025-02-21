@@ -1,12 +1,18 @@
 :root {
-  --dark-primary-color: #d32f2f;
-  --light-primary-color: #ffcdd2;
-  --primary-color: #f44336;
-  --text-icons: #ffffff;
-  --accent-color: #ff9800;
-  --primary-text: #212121;
-  --secondary-text: #757575;
-  --divider-color: #bdbdbd;
+  --primary-color: #6200ea; /* Material Design Primary Color */
+  --primary-light-color: #bb86fc; /* Material Design Primary Light Color */
+  --primary-dark-color: #3700b3; /* Material Design Primary Dark Color */
+  --secondary-color: #03dac6; /* Material Design Secondary Color */
+  --secondary-light-color: #66fff9; /* Material Design Secondary Light Color */
+  --secondary-dark-color: #00a896; /* Material Design Secondary Dark Color */
+  --background-color: #121212; /* Material Design Background Color */
+  --surface-color: #1e1e1e; /* Material Design Surface Color */
+  --error-color: #cf6679; /* Material Design Error Color */
+  --on-primary-color: #ffffff; /* Material Design On Primary Color */
+  --on-secondary-color: #000000; /* Material Design On Secondary Color */
+  --on-background-color: #ffffff; /* Material Design On Background Color */
+  --on-surface-color: #ffffff; /* Material Design On Surface Color */
+  --on-error-color: #000000; /* Material Design On Error Color */
 }
 
 body {
@@ -16,7 +22,8 @@ body {
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   margin: 0;
   font-size: 16px;
-  color: var(--primary-text);
+  color: var(--on-background-color);
+  background-color: var(--background-color);
 }
 
 .movies-list {
@@ -28,6 +35,15 @@ body {
 
 .movie-item {
   position: relative;
+  background-color: var(--surface-color);
+  color: var(--on-surface-color);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.movie-item:hover {
+  transform: scale(1.05);
 }
 
 .movie-item-header {
@@ -42,8 +58,9 @@ body {
 .movie-item__title {
   font-size: 1em;
   margin: 0;
-  background-color: var(--dark-primary-color);
-  color: var(--light-primary-color);
+  background-color: var(--primary-dark-color);
+  color: var(--on-primary-color);
+  padding: 10px;
 }
 
 .movie-item__badge {
@@ -53,9 +70,9 @@ body {
   transform: translateX(-50%);
   z-index: 1;
   font-weight: 500;
-  color: var(--text-icons);
+  color: var(--on-secondary-color);
   line-height: 1;
-  background-color: var(--accent-color);
+  background-color: var(--secondary-color);
   padding: 7px 10px;
   white-space: nowrap;
 }
@@ -63,10 +80,11 @@ body {
 .header {
   position: sticky;
   top: 0;
-  background-color: var(--dark-primary-color);
+  background-color: var(--primary-color);
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
+  color: var(--on-primary-color);
 }
