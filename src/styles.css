@@ -23,7 +23,14 @@ body {
   margin: 0;
   font-size: 16px;
   color: var(--on-background-color);
-  background-color: var(--background-color);
+  background-image: linear-gradient(
+    to top,
+    #055264,
+    #063e4c,
+    #052b35,
+    #021920,
+    #000000
+  );
 }
 
 .movie-item {
@@ -57,11 +64,16 @@ body {
 }
 
 .movie-item__title {
-  font-size: 0.85em !important;
+  font-size: 0.95em !important;
   margin: 0;
-  background-color: var(--primary-dark-color);
-  color: var(--on-primary-color);
+  background-color: var(--surface-color);
+  color: var(--on-surface-color);
+  mix-blend-mode: lighten;
   padding: 0px;
+  text-align: center;
+  min-height: 80px;
+  white-space: normal;
+  align-content: center;
 }
 
 /* .movie-item__badge {
@@ -77,19 +89,6 @@ body {
   padding: 7px 10px;
   white-space: nowrap;
 } */
-
-.header {
-  position: sticky;
-  top: 0;
-  background-color: var(--primary-color);
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  color: var(--on-primary-color);
-  margin-bottom: 2em;
-}
 
 .css-1lt5qva-MuiCardContent-root:last-child {
   padding: 0 !important;

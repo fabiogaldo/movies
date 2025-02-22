@@ -42,7 +42,7 @@ const MoviesList = ({ movies }: { movies: any[] }) => {
 
   return (
     <>
-      <Grid container spacing={1} className="movies-list">
+      <Grid container spacing={1} className="movies-list" sx={{ mt: 10 }}>
         {movies.map((movie) => (
           <Grid item key={movie.id} xs={12} sm={4} md={2}>
             <MovieItem movie={movie} onClick={handleOpen} />

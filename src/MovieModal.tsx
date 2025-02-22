@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import { Modal, Box, Typography, Grid } from "@mui/material";
-
+import { Modal, Box, Typography, Grid, Paper, Chip } from "@mui/material";
+import { styled } from "@mui/material/styles";
 interface Genre {
   id: number;
   name: string;
@@ -16,6 +16,7 @@ interface Movie {
   title: string;
   overview: string;
   genre_ids?: number[];
+  release_date: string;
 }
 
 interface MovieModalProps {
@@ -36,8 +37,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
   const getGenreNames = (genreIds: number[], genres: Genre[]) => {
     return genreIds
       .map((id: number) => genres.find((genre) => genre.id === id)?.name)
-      .filter((name) => name)
-      .join(", ");
+      .filter((name) => name);
   };
 
   const imageColor = movie?.backdrop_color || "#1976d2";
@@ -47,10 +47,9 @@ const MovieModal: React.FC<MovieModalProps> = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "80vw",
-    height: "80vh",
+    width: "90vw",
+    aspectRatio: "16 / 9",
     bgcolor: "#1976d2",
-    border: "2px solid #000",
     boxShadow: 24,
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -59,6 +58,15 @@ const MovieModal: React.FC<MovieModalProps> = ({
     display: "flex",
     flexDirection: "column",
   };
+
+  const StyledPaper = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body1,
+    textAlign: "right",
+    color: theme.palette.text.secondary,
+    minHeight: "100px",
+    padding: "20px",
+    backgroundBlendMode: "screen",
+  }));
 
   return (
     console.log(movie?.backdrop_color),
@@ -86,19 +94,27 @@ const MovieModal: React.FC<MovieModalProps> = ({
                     id="movie-modal-title"
                     variant="h4"
                     component="h2">
-                    {movie.title}
+                    <strong>{movie.title}</strong>{" "}
+                    <span style={{ fontSize: "0.5em" }}>(2020)</span>
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sx={{ flexGrow: 1, overflowY: "auto" }}>
-                  <Typography id="movie-modal-description" variant="body1">
-                    {movie.overview}
-                  </Typography>
+                  <StyledPaper elevation={3}>
+                    <Typography id="movie-modal-description" variant="h6">
+                      <em>{movie.overview}</em>
+                    </Typography>
+                  </StyledPaper>
                 </Grid>
                 {movie.genre_ids && (
                   <Grid item xs={12} sx={{ mt: "auto" }}>
-                    <Typography variant="body2">
-                      Genres: {getGenreNames(movie.genre_ids, genres)}
-                    </Typography>
+                    {getGenreNames(movie.genre_ids, genres).map((name) => (
+                      <Chip
+                        key={name}
+                        label={name}
+                        sx={{ margin: "2px" }}
+                        color={"warning"}
+                      />
+                    ))}
                   </Grid>
                 )}
               </Grid>

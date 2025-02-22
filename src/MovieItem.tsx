@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActionArea,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
 import { extractColors } from "extract-colors";
@@ -16,6 +22,7 @@ interface MovieItemProps {
     featured?: boolean;
     title: string;
     genre_ids?: number[];
+    release_date: string;
   };
   onClick: (movie: MovieItemProps["movie"]) => void;
 }
@@ -81,9 +88,14 @@ export default function MovieItem({ movie, onClick }: MovieItemProps) {
             <WorkspacePremiumOutlinedIcon />
           </FeaturedIconWrapper>
         )}
-        <Typography variant="h6" component="div" className="movie-item__title">
-          {movie.title}
-        </Typography>
+        <CardActionArea sx={{ display: "flex" }}>
+          <Typography
+            variant="h6"
+            component="div"
+            className="movie-item__title">
+            {movie.title}
+          </Typography>
+        </CardActionArea>
       </CardContent>
     </Card>
   );

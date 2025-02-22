@@ -120,9 +120,21 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Grid container spacing={2} alignItems="center">
+      <AppBar position="static" sx={{ backgroundColor: "#021920" }}>
+        <Toolbar
+          sx={{
+            position: "fixed",
+            zIndex: 100,
+            backgroundColor: "#000",
+            width: "100%",
+            left: 0,
+            mixBlendMode: "luminosity",
+          }}>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            sx={{ margin: "auto", width: "calc(100vw - 35%)" }}>
             <Grid item xs={12} sm={4}>
               <Search>
                 <SearchIconWrapper>
@@ -136,6 +148,13 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
                 />
               </Search>
             </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <GenresList
+                selectedGenre={selectedGenre}
+                onGenreChange={handleGenreChange}
+              />
+            </Grid>
             <Grid item xs={12} sm={4}>
               <FormControlLabel
                 control={
@@ -147,12 +166,6 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
                   />
                 }
                 label="Featured"
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <GenresList
-                selectedGenre={selectedGenre}
-                onGenreChange={handleGenreChange}
               />
             </Grid>
           </Grid>
