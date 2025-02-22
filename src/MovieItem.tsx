@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
+import { extractColors } from "extract-colors";
 import "./styles.css";
 
 const assetsUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face/";
@@ -10,6 +11,8 @@ interface MovieItemProps {
   movie: {
     id: number;
     poster_path: string;
+    backdrop_path: string;
+    backdrop_color: string;
     featured?: boolean;
     title: string;
     genre_ids?: number[];
@@ -39,6 +42,23 @@ const MoviePosterWrapper = styled("div")(({ theme }) => ({
 }));
 
 export default function MovieItem({ movie, onClick }: MovieItemProps) {
+  const movieImageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (movieImageRef.current) {
+      extractColors(movieImageRef.current.src, {})
+        .then((colors) => {
+          if (colors.length > 0) {
+            movie.backdrop_color = colors[0].hex; // Cor dominante
+            movie.backdrop_path = movie.poster_path;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [movie.poster_path]);
+
   return (
     <Card
       className="movie-item"
@@ -52,6 +72,7 @@ export default function MovieItem({ movie, onClick }: MovieItemProps) {
           height={330}
           image={assetsUrl + movie.poster_path}
           alt={movie.title}
+          ref={movieImageRef}
         />
       </MoviePosterWrapper>
       <CardContent>

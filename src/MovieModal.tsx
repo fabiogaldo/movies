@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Modal, Box, Typography, Grid } from "@mui/material";
 
@@ -9,6 +10,8 @@ interface Genre {
 interface Movie {
   id: number;
   poster_path: string;
+  backdrop_path: string;
+  backdrop_color: string;
   featured?: boolean;
   title: string;
   overview: string;
@@ -22,7 +25,7 @@ interface MovieModalProps {
   genres: Genre[];
 }
 
-const assetsUrl = "https://media.themoviedb.org/t/p/w1066_and_h600_bestv2";
+const assetsUrl = "https://image.tmdb.org/t/p/w1066_and_h600_bestv2";
 
 const MovieModal: React.FC<MovieModalProps> = ({
   movie,
@@ -30,6 +33,15 @@ const MovieModal: React.FC<MovieModalProps> = ({
   handleClose,
   genres,
 }) => {
+  const getGenreNames = (genreIds: number[], genres: Genre[]) => {
+    return genreIds
+      .map((id: number) => genres.find((genre) => genre.id === id)?.name)
+      .filter((name) => name)
+      .join(", ");
+  };
+
+  const imageColor = movie?.backdrop_color || "#1976d2";
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -42,53 +54,59 @@ const MovieModal: React.FC<MovieModalProps> = ({
     boxShadow: 24,
     backgroundPosition: "center",
     backgroundSize: "cover",
-    mixBlendMode: "luminosity",
+    mixBlendMode: "screen",
     p: 4,
     display: "flex",
     flexDirection: "column",
   };
 
-  const getGenreNames = (genreIds: number[], genres: Genre[]) => {
-    return genreIds
-      .map((id) => genres.find((genre) => genre.id === id)?.name)
-      .filter((name) => name)
-      .join(", ");
-  };
-
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="movie-modal-title"
-      aria-describedby="movie-modal-description">
-      <Box
-        sx={style}
-        style={{
-          backgroundImage: `url(${assetsUrl + (movie?.poster_path || "")})`,
-        }}>
-        {movie && (
-          <Grid container spacing={2} sx={{ color: "white", height: "100%" }}>
-            <Grid item xs={12}>
-              <Typography id="movie-modal-title" variant="h4" component="h2">
-                {movie.title}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sx={{ flexGrow: 1, overflowY: "auto" }}>
-              <Typography id="movie-modal-description" variant="body1">
-                {movie.overview}
-              </Typography>
-            </Grid>
-            {movie.genre_ids && (
-              <Grid item xs={12} sx={{ mt: "auto" }}>
-                <Typography variant="body2">
-                  Genres: {getGenreNames(movie.genre_ids, genres)}
-                </Typography>
+    console.log(movie?.backdrop_color),
+    (
+      <>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="movie-modal-title"
+          aria-describedby="movie-modal-description">
+          <Box
+            sx={style}
+            style={{
+              backgroundColor: imageColor,
+              backgroundImage: `url(${assetsUrl + (movie?.poster_path || "")})`,
+              backgroundBlendMode: "multiply",
+            }}>
+            {movie && (
+              <Grid
+                container
+                spacing={2}
+                sx={{ color: "white", height: "100%" }}>
+                <Grid item xs={12}>
+                  <Typography
+                    id="movie-modal-title"
+                    variant="h4"
+                    component="h2">
+                    {movie.title}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sx={{ flexGrow: 1, overflowY: "auto" }}>
+                  <Typography id="movie-modal-description" variant="body1">
+                    {movie.overview}
+                  </Typography>
+                </Grid>
+                {movie.genre_ids && (
+                  <Grid item xs={12} sx={{ mt: "auto" }}>
+                    <Typography variant="body2">
+                      Genres: {getGenreNames(movie.genre_ids, genres)}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
             )}
-          </Grid>
-        )}
-      </Box>
-    </Modal>
+          </Box>
+        </Modal>
+      </>
+    )
   );
 };
 
