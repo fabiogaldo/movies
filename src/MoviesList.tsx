@@ -5,9 +5,9 @@ import MovieItem from "./MovieItem";
 
 const MoviesList = ({ movies }: { movies: any[] }) => {
   return (
-    <Grid container spacing={4} className="movies-list">
+    <Grid container spacing={1} className="movies-list">
       {movies.map((movie) => (
-        <Grid item key={movie.id} xs={12} sm={6} md={4}>
+        <Grid item key={movie.id} xs={12} sm={6} md={2}>
           <MovieItem movie={movie} />
         </Grid>
       ))}

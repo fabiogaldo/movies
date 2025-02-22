@@ -58,14 +58,14 @@ body {
 }
 
 .movie-item__title {
-  font-size: 0.85em;
+  font-size: 0.85em !important;
   margin: 0;
   background-color: var(--primary-dark-color);
   color: var(--on-primary-color);
   padding: 0px;
 }
 
-.movie-item__badge {
+/* .movie-item__badge {
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -77,7 +77,7 @@ body {
   background-color: var(--secondary-color);
   padding: 7px 10px;
   white-space: nowrap;
-}
+} */
 
 .header {
   position: sticky;
