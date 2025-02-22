@@ -11,9 +11,10 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
+import "./styles.css"; // Certifique-se de importar o arquivo CSS
 
-const fetchMovies = async (): Promise<any[]> => {
-  const { data } = await axios.get<any[]>(`http://localhost:8001/movies`);
+const fetchMovies = async () => {
+  const { data } = await axios.get(`http://localhost:8001/movies`);
   return data;
 };
 

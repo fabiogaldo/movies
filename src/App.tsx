@@ -4,6 +4,7 @@ import MoviesList from "./MoviesList";
 import Header from "./Header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Container } from "@mui/material";
+
 interface Movie {
   id: number;
   title: string;

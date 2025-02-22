@@ -1,5 +1,7 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Badge } from "@mui/material";
+import "./styles.css"; // Certifique-se de importar o arquivo CSS
+
 const assetsUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face/";
 
 interface MovieItemProps {
@@ -26,7 +28,7 @@ export default function MovieItem({ movie }: MovieItemProps) {
       />
       <CardContent>
         {movie.featured && <Badge badgeContent="Em destaque" color="primary" />}
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" className="movie-item__title">
           {movie.title}
         </Typography>
       </CardContent>

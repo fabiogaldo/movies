@@ -30,7 +30,6 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(1, 1fr);
-  gap: 5px;
 }
 
 .movie-item {
@@ -39,11 +38,14 @@ body {
   color: var(--on-surface-color);
   border-radius: 4px;
   overflow: hidden;
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s;
+  transform: scale(1);
+  display: block;
 }
 
 .movie-item:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  transition: all 0.3s;
 }
 
 .movie-item-header {
@@ -87,4 +89,5 @@ body {
   align-items: center;
   z-index: 1000;
   color: var(--on-primary-color);
+  margin-bottom: 2em;
 }

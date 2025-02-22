@@ -31,7 +31,7 @@
     "typescript": "4.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start & json-server src/data/popular.json --port 8001 & json-server src/data/genres.json --port 8000",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
