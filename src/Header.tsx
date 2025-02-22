@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
+import { styled, alpha } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import GenresList from "./GenreList";
@@ -10,8 +11,54 @@ import {
   Checkbox,
   CircularProgress,
   Typography,
+  AppBar,
+  Box,
+  Switch,
+  Toolbar,
+  InputBase,
 } from "@mui/material";
-import "./styles.css"; // Certifique-se de importar o arquivo CSS
+import SearchIcon from "@mui/icons-material/Search";
+import "./styles.css";
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(3),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
+}));
 
 const fetchMovies = async () => {
   const { data } = await axios.get(`http://localhost:8001/movies`);
@@ -71,27 +118,42 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   };
 
   return (
-    <header className="header">
-      <TextField
-        label="Search by title"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        variant="outlined"
-        style={{ marginRight: "10px" }}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox checked={isFeatured} onChange={handleFeaturedChange} />
-        }
-        label="Featured"
-      />
-      <GenresList
-        selectedGenre={selectedGenre}
-        onGenreChange={handleGenreChange}
-      />
-      {isLoading && <CircularProgress />}
-      {error && <Typography color="error">Error loading movies</Typography>}
-    </header>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search by title"
+              inputProps={{ "aria-label": "search" }}
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </Search>
+          <Box sx={{ flexGrow: 1 }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  defaultChecked
+                  size="small"
+                  checked={isFeatured}
+                  onChange={handleFeaturedChange}
+                />
+              }
+              label="Featured"
+            />
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <GenresList
+              selectedGenre={selectedGenre}
+              onGenreChange={handleGenreChange}
+            />
+          </Box>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 

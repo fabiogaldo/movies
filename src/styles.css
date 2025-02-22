@@ -58,11 +58,11 @@ body {
 }
 
 .movie-item__title {
-  font-size: 1em;
+  font-size: 0.85em;
   margin: 0;
   background-color: var(--primary-dark-color);
   color: var(--on-primary-color);
-  padding: 10px;
+  padding: 0px;
 }
 
 .movie-item__badge {
@@ -90,4 +90,18 @@ body {
   z-index: 1000;
   color: var(--on-primary-color);
   margin-bottom: 2em;
+}
+
+.css-1lt5qva-MuiCardContent-root:last-child {
+  padding: 0 !important;
+}
+
+.css-6khn8x-MuiInputBase-root-MuiFilledInput-root-MuiSelect-root {
+  background-color: #ffffff;
+  opacity: 0.15;
+}
+
+.css-6khn8x-MuiInputBase-root-MuiFilledInput-root-MuiSelect-root:hover {
+  background-color: #ffffff;
+  opacity: 0.25;
 }

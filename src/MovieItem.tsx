@@ -27,8 +27,8 @@ export default function MovieItem({ movie }: MovieItemProps) {
         alt={movie.title}
       />
       <CardContent>
-        {movie.featured && <Badge badgeContent="Em destaque" color="primary" />}
-        <Typography variant="h5" component="div" className="movie-item__title">
+        {movie.featured && <Badge badgeContent="Featured" color="primary" />}
+        <Typography variant="h4" component="div" className="movie-item__title">
           {movie.title}
         </Typography>
       </CardContent>

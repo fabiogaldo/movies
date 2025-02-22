@@ -6,11 +6,26 @@ import axios from "axios";
 import {
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
   CircularProgress,
   Typography,
 } from "@mui/material";
+import { styled, alpha } from "@mui/material/styles";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+
+// const StyledInputBase = styled(Select)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     // vertical padding + font size from searchIcon
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create("width"),
+//     width: "100%",
+//     [theme.breakpoints.up("md")]: {
+//       width: "20ch",
+//     },
+//   },
+// }));
 
 interface Genre {
   id: number;
@@ -45,6 +60,7 @@ const GenresList = ({
     <FormControl fullWidth>
       <InputLabel>Genre</InputLabel>
       <Select
+        variant="filled"
         value={selectedGenre !== null ? selectedGenre : ""}
         onChange={(e) =>
           onGenreChange(e.target.value ? Number(e.target.value) : null)
