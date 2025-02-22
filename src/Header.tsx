@@ -16,6 +16,7 @@ import {
   Switch,
   Toolbar,
   InputBase,
+  Grid,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles.css";
@@ -28,7 +29,7 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
-  marginLeft: 0,
+  marginLeft: "10px",
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
@@ -121,36 +122,40 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search by title"
-              inputProps={{ "aria-label": "search" }}
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  defaultChecked
-                  size="small"
-                  checked={isFeatured}
-                  onChange={handleFeaturedChange}
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={4}>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search by title"
+                  inputProps={{ "aria-label": "search" }}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                 />
-              }
-              label="Featured"
-            />
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <GenresList
-              selectedGenre={selectedGenre}
-              onGenreChange={handleGenreChange}
-            />
-          </Box>
+              </Search>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    defaultChecked
+                    size="small"
+                    checked={isFeatured}
+                    onChange={handleFeaturedChange}
+                  />
+                }
+                label="Featured"
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <GenresList
+                selectedGenre={selectedGenre}
+                onGenreChange={handleGenreChange}
+              />
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
     </Box>

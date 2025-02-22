@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
-import "./styles.css"; // Certifique-se de importar o arquivo CSS
+import "./styles.css";
 
 const assetsUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face/";
 
@@ -14,6 +14,7 @@ interface MovieItemProps {
     title: string;
     genre_ids?: number[];
   };
+  onClick: (movie: MovieItemProps["movie"]) => void;
 }
 
 const FeaturedIconWrapper = styled("div")(({ theme }) => ({
@@ -30,17 +31,20 @@ const FeaturedIconWrapper = styled("div")(({ theme }) => ({
   textAlign: "center",
 }));
 
-const MoviePosterWrapper = styled("div")(() => ({
-  width: "220px",
-  height: "330px",
+const MoviePosterWrapper = styled("div")(({ theme }) => ({
+  width: "100%",
+  overflow: "hidden",
+  backgroundColor: theme.palette.primary.main,
+  margin: "0 auto",
 }));
 
-export default function MovieItem({ movie }: MovieItemProps) {
+export default function MovieItem({ movie, onClick }: MovieItemProps) {
   return (
     <Card
       className="movie-item"
       data-genres={movie.genre_ids?.join(",")}
-      data-featured={movie.featured?.toString()}>
+      data-featured={movie.featured?.toString()}
+      onClick={() => onClick(movie)}>
       <MoviePosterWrapper>
         <CardMedia
           component="img"

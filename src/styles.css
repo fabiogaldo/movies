@@ -26,12 +26,6 @@ body {
   background-color: var(--background-color);
 }
 
-.movies-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-}
-
 .movie-item {
   position: relative;
   background-color: var(--surface-color);
@@ -43,9 +37,13 @@ body {
   display: block;
 }
 
-.movie-item:hover {
+.movie-item img {
+}
+
+.movie-item:hover img {
   transform: scale(1.1);
   transition: all 0.3s;
+  mix-blend-mode: multiply;
 }
 
 .movie-item-header {
@@ -55,6 +53,7 @@ body {
 .movie-item__poster {
   display: block;
   width: 100%;
+  overflow: hidden;
 }
 
 .movie-item__title {
