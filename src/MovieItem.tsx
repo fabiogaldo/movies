@@ -82,7 +82,8 @@ export default function MovieItem({ movie, onClick }: MovieItemProps) {
           ref={movieImageRef}
         />
       </MoviePosterWrapper>
-      <CardContent>
+      <CardContent
+        sx={{ backgroundColor: "#000", p: "0", paddingBottom: "0 !important" }}>
         {movie.featured && (
           <FeaturedIconWrapper>
             <WorkspacePremiumOutlinedIcon />

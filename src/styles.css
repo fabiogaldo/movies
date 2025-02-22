@@ -15,6 +15,12 @@
   --on-error-color: #000000; /* Material Design On Error Color */
 }
 
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
@@ -74,6 +80,7 @@ body {
   min-height: 80px;
   white-space: normal;
   align-content: center;
+  width: 100%;
 }
 
 /* .movie-item__badge {
