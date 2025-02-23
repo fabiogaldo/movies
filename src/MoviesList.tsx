@@ -64,4 +64,3 @@ const MoviesList = ({ movies }: { movies: any[] }) => {
 };
 
 export default MoviesList;
-2;

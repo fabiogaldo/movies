@@ -27,7 +27,7 @@ interface MovieModalProps {
   genres: Genre[];
 }
 
-const assetsUrl = process.env.REACT_APP_API_BACKDROP_URL;
+const IMG_BACKDROP_URL = process.env.REACT_APP_API_BACKDROP_URL;
 
 const MovieModal: React.FC<MovieModalProps> = ({
   movie,
@@ -36,7 +36,6 @@ const MovieModal: React.FC<MovieModalProps> = ({
   genres,
 }) => {
   const getGenreNames = (genreIds: any, genres: Genre[]) => {
-    //let a = "[27, 9648]";
     genreIds = genreIds.replace(/'/g, '"');
     genreIds = JSON.parse(genreIds);
     return genreIds
@@ -49,22 +48,27 @@ const MovieModal: React.FC<MovieModalProps> = ({
 
   const imageColor = movie?.backdrop_color || "#1976d2";
 
-  const style = {
+  const StyledBox = styled(Box)(({ theme }) => ({
     position: "absolute",
-    top: "50%",
+    top: "10%",
     left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "90vw",
+    transform: "translateX(-50%)",
+    width: "95vw",
     aspectRatio: "16 / 9",
-    bgcolor: "#1976d2",
-    boxShadow: 24,
+    backgroundcolor: "#1976d2",
     backgroundPosition: "center",
     backgroundSize: "cover",
     mixBlendMode: "screen",
-    p: 4,
+
     display: "flex",
     flexDirection: "column",
-  };
+    [theme.breakpoints.up("sm")]: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "90vw",
+    },
+  }));
 
   const StyledPaper = styled(Paper)(({ theme }) => ({
     ...theme.typography.body1,
@@ -82,11 +86,12 @@ const MovieModal: React.FC<MovieModalProps> = ({
         onClose={handleClose}
         aria-labelledby="movie-modal-title"
         aria-describedby="movie-modal-description">
-        <Box
-          sx={style}
+        <StyledBox
           style={{
             backgroundColor: imageColor,
-            backgroundImage: `url(${assetsUrl + (movie?.poster_path || "")})`,
+            backgroundImage: `url(${
+              IMG_BACKDROP_URL + (movie?.poster_path || "")
+            })`,
             backgroundBlendMode: "multiply",
           }}>
           {movie && (
@@ -94,10 +99,12 @@ const MovieModal: React.FC<MovieModalProps> = ({
               <Grid item xs={12}>
                 <Typography id="movie-modal-title" variant="h4" component="h2">
                   <strong>{movie.title}</strong>{" "}
-                  <span style={{ fontSize: "0.5em" }}>(2020)</span>
+                  <span style={{ fontSize: "0.7em" }}>
+                    ({new Date(movie.release_date).getFullYear()})
+                  </span>
                 </Typography>
               </Grid>
-              <Grid item xs={12} sx={{ flexGrow: 1, overflowY: "auto" }}>
+              <Grid item xs={12}>
                 <StyledPaper elevation={3}>
                   <Typography id="movie-modal-description" variant="h6">
                     <em>{movie.overview}</em>
@@ -118,7 +125,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
               )}
             </Grid>
           )}
-        </Box>
+        </StyledBox>
       </Modal>
     </>
   );

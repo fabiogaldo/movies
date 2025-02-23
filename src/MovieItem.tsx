@@ -11,7 +11,7 @@ import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOu
 import { extractColors } from "extract-colors";
 import "./styles.css";
 
-const assetsUrl = process.env.REACT_APP_API_POSTER_URL;
+const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL;
 
 interface MovieItemProps {
   movie: {
@@ -66,7 +66,6 @@ export default function MovieItem({ movie, onClick }: MovieItemProps) {
     }
   }, [movie.poster_path]);
 
-  console.log(movie);
   return (
     <Card
       className="movie-item"
@@ -78,10 +77,9 @@ export default function MovieItem({ movie, onClick }: MovieItemProps) {
           component="img"
           width="220"
           height={330}
-          image={assetsUrl + movie.poster_path}
+          image={IMG_POSTER_URL + movie.poster_path}
           alt={movie.title}
-          ref={movieImageRef}
-        />
+          ref={movieImageRef}></CardMedia>
       </MoviePosterWrapper>
       <CardContent
         sx={{ backgroundColor: "#000", p: "0", paddingBottom: "0 !important" }}>
