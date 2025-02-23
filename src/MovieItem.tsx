@@ -21,7 +21,7 @@ interface MovieItemProps {
     backdrop_color: string;
     featured?: boolean;
     title: string;
-    genre_ids?: number[];
+    genre_ids?: string;
     release_date: string;
   };
   onClick: (movie: MovieItemProps["movie"]) => void;
@@ -66,10 +66,11 @@ export default function MovieItem({ movie, onClick }: MovieItemProps) {
     }
   }, [movie.poster_path]);
 
+  console.log(movie);
   return (
     <Card
       className="movie-item"
-      data-genres={movie.genre_ids?.join(",")}
+      data-genres={movie.genre_ids}
       data-featured={movie.featured?.toString()}
       onClick={() => onClick(movie)}>
       <MoviePosterWrapper>

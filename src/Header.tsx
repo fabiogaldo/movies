@@ -17,6 +17,7 @@ import {
   Toolbar,
   InputBase,
   Grid,
+  Snackbar,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles.css";
@@ -61,28 +62,53 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const fetchMovies = async () => {
-  const { data } = await axios.get(`http://localhost:8001/movies`);
-  return data;
-};
+const accessToken =
+  "f6b1cfb3bce0b0946626f644710e4506a06c0cafb4f6d1dc48d6d4ce78d49a6ba84a6716a4f6e639dd8e2f3bf0eed45025ab6cd685c5e3de701282bd7edcb5a85c950c2a7d1bb623bc5eac99e9bf7e035b12ae636acb32af4b36f47408b045474d6abbd21a81db31ed98162b942a864e483b9bc41f678af55a4fb64db941ac11";
 
 const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [allMovies, setAllMovies] = useState<any[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const { data, isLoading, error } = useQuery({
+  const fetchMovies = async () => {
+    try {
+      const response = await axios.get(
+        "https://splendid-excellence-23a4c4c895.strapiapp.com/api/movies",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      setIsOpen(true);
+      return (
+        <Box sx={{ width: 500 }}>
+          <Snackbar
+            open={isOpen}
+            autoHideDuration={6000}
+            message={`Error fetching data: ${(error as Error).message}`}
+          />
+        </Box>
+      );
+    }
+  };
+
+  const { data } = useQuery({
     queryKey: ["movies"],
     queryFn: fetchMovies,
   });
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       setAllMovies(data);
       setMovies(data);
     }
-  }, [data, setMovies]);
+  }, [data]);
 
   useEffect(() => {
     let filteredMovies = allMovies;
@@ -156,17 +182,25 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
               />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    defaultChecked
-                    size="small"
-                    checked={isFeatured}
-                    onChange={handleFeaturedChange}
-                  />
-                }
-                label="Featured"
-              />
+              <div
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  borderRadius: "4px",
+                  padding: "8px 8px",
+                  color: "#fff",
+                }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      size="small"
+                      checked={isFeatured}
+                      onChange={handleFeaturedChange}
+                    />
+                  }
+                  label="Featured"
+                  sx={{ marginLeft: "10px" }}
+                />
+              </div>
             </Grid>
           </Grid>
         </Toolbar>
@@ -176,3 +210,8 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
 };
 
 export default Header;
+function err(reason: any): PromiseLike<never> {
+  return Promise.reject(
+    new Error(`Error fetching data: ${reason.message || reason}`)
+  );
+}

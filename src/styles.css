@@ -37,6 +37,8 @@ body {
     #021920,
     #000000
   );
+  background-size: 100%;
+  background-attachment: fixed;
 }
 
 .movie-item {
@@ -51,12 +53,15 @@ body {
 }
 
 .movie-item img {
+  mix-blend-mode: normal;
+  transition: all 0.3s;
 }
 
 .movie-item:hover img {
   transform: scale(1.1);
   transition: all 0.3s;
-  mix-blend-mode: multiply;
+  mix-blend-mode: lighten;
+  filter: blur(2px);
 }
 
 .movie-item-header {
@@ -81,6 +86,12 @@ body {
   white-space: normal;
   align-content: center;
   width: 100%;
+  transition: all 0.3s;
+}
+
+.movie-item:hover .movie-item__title {
+  color: #03dac6;
+  transition: all 0.3s;
 }
 
 /* .movie-item__badge {

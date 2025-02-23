@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Modal, Box, Typography, Grid, Paper, Chip } from "@mui/material";
@@ -34,10 +35,16 @@ const MovieModal: React.FC<MovieModalProps> = ({
   handleClose,
   genres,
 }) => {
-  const getGenreNames = (genreIds: number[], genres: Genre[]) => {
+  const getGenreNames = (genreIds: any, genres: Genre[]) => {
+    //let a = "[27, 9648]";
+    genreIds = genreIds.replace(/'/g, '"');
+    genreIds = JSON.parse(genreIds);
     return genreIds
-      .map((id: number) => genres.find((genre) => genre.id === id)?.name)
-      .filter((name) => name);
+      .map(
+        (id: number): string | undefined =>
+          genres.find((genre: Genre) => genre.id === id)?.name
+      )
+      .filter((name: string | undefined): name is string => name !== undefined);
   };
 
   const imageColor = movie?.backdrop_color || "#1976d2";
@@ -107,7 +114,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
                 </Grid>
                 {movie.genre_ids && (
                   <Grid item xs={12} sx={{ mt: "auto" }}>
-                    {getGenreNames(movie.genre_ids, genres).map((name) => (
+                    {getGenreNames(movie.genre_ids, genres).map((name: any) => (
                       <Chip
                         key={name}
                         label={name}
