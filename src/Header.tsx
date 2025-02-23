@@ -17,10 +17,10 @@ import {
   Toolbar,
   InputBase,
   Grid,
-  Snackbar,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles.css";
+import { useSnackbar } from "./components/SnackbarProvider";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -62,38 +62,33 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const accessToken =
-  "f6b1cfb3bce0b0946626f644710e4506a06c0cafb4f6d1dc48d6d4ce78d49a6ba84a6716a4f6e639dd8e2f3bf0eed45025ab6cd685c5e3de701282bd7edcb5a85c950c2a7d1bb623bc5eac99e9bf7e035b12ae636acb32af4b36f47408b045474d6abbd21a81db31ed98162b942a864e483b9bc41f678af55a4fb64db941ac11";
+const ACCESS_TOKEN = process.env.REACT_APP_API_ACCESS_TOKEN;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [allMovies, setAllMovies] = useState<any[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { showSnackbar } = useSnackbar();
+
+  const handleError = (message: any) => {
+    setOpen(true);
+    showSnackbar(message, "error");
+  };
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get(
-        "https://splendid-excellence-23a4c4c895.strapiapp.com/api/movies",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}/movies`, {
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
+      });
       return response.data.data;
     } catch (error) {
-      setIsOpen(true);
-      return (
-        <Box sx={{ width: 500 }}>
-          <Snackbar
-            open={isOpen}
-            autoHideDuration={6000}
-            message={`Error fetching data: ${(error as Error).message}`}
-          />
-        </Box>
-      );
+      setOpen(true);
+      handleError("Error loading movies.");
     }
   };
 
@@ -104,7 +99,6 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setAllMovies(data);
       setMovies(data);
     }

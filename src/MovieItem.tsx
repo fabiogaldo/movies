@@ -11,7 +11,7 @@ import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOu
 import { extractColors } from "extract-colors";
 import "./styles.css";
 
-const assetsUrl = "https://www.themoviedb.org/t/p/w220_and_h330_face/";
+const assetsUrl = process.env.REACT_APP_API_POSTER_URL;
 
 interface MovieItemProps {
   movie: {

@@ -7,6 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./themes/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Container } from "@mui/material";
+import { SnackbarProvider } from "./components/SnackbarProvider";
 
 interface Movie {
   id: number;
@@ -22,13 +23,15 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <QueryClientProvider client={queryClient}>
-        <Container>
-          <Header setMovies={setMovies} />
-          <MoviesList movies={movies} />
-        </Container>
-      </QueryClientProvider>
+      <SnackbarProvider>
+        <CssBaseline />
+        <QueryClientProvider client={queryClient}>
+          <Container>
+            <Header setMovies={setMovies} />
+            <MoviesList movies={movies} />
+          </Container>
+        </QueryClientProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

@@ -27,7 +27,7 @@ interface MovieModalProps {
   genres: Genre[];
 }
 
-const assetsUrl = "https://image.tmdb.org/t/p/w1066_and_h600_bestv2";
+const assetsUrl = process.env.REACT_APP_API_BACKDROP_URL;
 
 const MovieModal: React.FC<MovieModalProps> = ({
   movie,
@@ -76,60 +76,51 @@ const MovieModal: React.FC<MovieModalProps> = ({
   }));
 
   return (
-    console.log(movie?.backdrop_color),
-    (
-      <>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="movie-modal-title"
-          aria-describedby="movie-modal-description">
-          <Box
-            sx={style}
-            style={{
-              backgroundColor: imageColor,
-              backgroundImage: `url(${assetsUrl + (movie?.poster_path || "")})`,
-              backgroundBlendMode: "multiply",
-            }}>
-            {movie && (
-              <Grid
-                container
-                spacing={2}
-                sx={{ color: "white", height: "100%" }}>
-                <Grid item xs={12}>
-                  <Typography
-                    id="movie-modal-title"
-                    variant="h4"
-                    component="h2">
-                    <strong>{movie.title}</strong>{" "}
-                    <span style={{ fontSize: "0.5em" }}>(2020)</span>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sx={{ flexGrow: 1, overflowY: "auto" }}>
-                  <StyledPaper elevation={3}>
-                    <Typography id="movie-modal-description" variant="h6">
-                      <em>{movie.overview}</em>
-                    </Typography>
-                  </StyledPaper>
-                </Grid>
-                {movie.genre_ids && (
-                  <Grid item xs={12} sx={{ mt: "auto" }}>
-                    {getGenreNames(movie.genre_ids, genres).map((name: any) => (
-                      <Chip
-                        key={name}
-                        label={name}
-                        sx={{ margin: "2px" }}
-                        color={"warning"}
-                      />
-                    ))}
-                  </Grid>
-                )}
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="movie-modal-title"
+        aria-describedby="movie-modal-description">
+        <Box
+          sx={style}
+          style={{
+            backgroundColor: imageColor,
+            backgroundImage: `url(${assetsUrl + (movie?.poster_path || "")})`,
+            backgroundBlendMode: "multiply",
+          }}>
+          {movie && (
+            <Grid container spacing={2} sx={{ color: "white", height: "100%" }}>
+              <Grid item xs={12}>
+                <Typography id="movie-modal-title" variant="h4" component="h2">
+                  <strong>{movie.title}</strong>{" "}
+                  <span style={{ fontSize: "0.5em" }}>(2020)</span>
+                </Typography>
               </Grid>
-            )}
-          </Box>
-        </Modal>
-      </>
-    )
+              <Grid item xs={12} sx={{ flexGrow: 1, overflowY: "auto" }}>
+                <StyledPaper elevation={3}>
+                  <Typography id="movie-modal-description" variant="h6">
+                    <em>{movie.overview}</em>
+                  </Typography>
+                </StyledPaper>
+              </Grid>
+              {movie.genre_ids && (
+                <Grid item xs={12} sx={{ mt: "auto" }}>
+                  {getGenreNames(movie.genre_ids, genres).map((name: any) => (
+                    <Chip
+                      key={name}
+                      label={name}
+                      sx={{ margin: "2px" }}
+                      color={"warning"}
+                    />
+                  ))}
+                </Grid>
+              )}
+            </Grid>
+          )}
+        </Box>
+      </Modal>
+    </>
   );
 };
 
