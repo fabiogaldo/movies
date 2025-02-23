@@ -4,72 +4,38 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
+  FormControl,
+  InputLabel,
+  MenuItem,
   CircularProgress,
   Typography,
-  TextField,
-  Autocomplete,
-  AutocompleteProps,
-  colors,
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const fetchGenres = async () => {
-  const { data } = await axios.get("http://localhost:8000/genres");
-  return data; // Ajuste conforme a estrutura dos dados retornados
-};
-
-const StyledAutocomplete = styled(Autocomplete)<
-  AutocompleteProps<Genre, false, false, false>
->(({ theme }) => ({
-  color: theme.palette.common.white,
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: "10px",
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  "& .MuiOutlinedInput-root": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    color: theme.palette.common.white,
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-  "& .MuiOutlinedInput .MuiAutocomplete-listbox": {
-    // backgroundColor: theme.palette.primary.main,
-    // padding: theme.spacing(1, 1, 1, 0),
-    // paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    // transition: theme.transitions.create("width"),
-    // width: "100%",
-    // color: theme.palette.common.white,
-    // [theme.breakpoints.up("md")]: {
-    //   width: "20ch",
-    // },
-    backgroundColor: "red",
-  },
-  "& .MuiAutocomplete-listbox li": {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
+// const StyledInputBase = styled(Select)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     // vertical padding + font size from searchIcon
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create("width"),
+//     width: "100%",
+//     [theme.breakpoints.up("md")]: {
+//       width: "20ch",
+//     },
+//   },
+// }));
 
 interface Genre {
   id: number;
   label: string;
 }
+
+const fetchGenres = async () => {
+  const { data } = await axios.get("http://localhost:8000/genres");
+  return data;
+};
 
 const GenresList = ({
   selectedGenre,
@@ -82,18 +48,37 @@ const GenresList = ({
     data: genres,
     isLoading,
     error,
-  } = useQuery<Genre[]>({ queryKey: ["genres"], queryFn: fetchGenres });
+  } = useQuery({
+    queryKey: ["genres"],
+    queryFn: fetchGenres,
+  });
 
   if (isLoading) return <CircularProgress />;
   if (error) return <Typography color="error">Error loading genres</Typography>;
 
   return (
-    <StyledAutocomplete
-      options={genres || []}
-      getOptionLabel={(option) => (option as Genre).label}
-      value={genres?.find((genre: Genre) => genre.id === selectedGenre) || null}
-      renderInput={(params) => <TextField {...params} label="Genres" />}
-    />
+    <FormControl variant="standard" sx={{ m: 1, minWidth: 120, width: "90%" }}>
+      <Select
+        value={selectedGenre !== null ? selectedGenre : ""}
+        onChange={(e) =>
+          onGenreChange(e.target.value ? Number(e.target.value) : null)
+        }
+        displayEmpty
+        inputProps={{ "aria-label": "Without label" }}
+        sx={{
+          backgroundColor: "rgba(255, 255, 255, 0.15)",
+          borderRadius: "4px",
+          padding: "4px 8px",
+          color: "#fff",
+        }}>
+        <MenuItem value="">All Genres</MenuItem>
+        {genres.map((genre: Genre) => (
+          <MenuItem key={genre.id} value={genre.id}>
+            {genre.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 
