@@ -3,6 +3,7 @@
 import React from "react";
 import { Modal, Box, Typography, Grid, Paper, Chip } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Height } from "@mui/icons-material";
 interface Genre {
   id: number;
   name: string;
@@ -53,8 +54,9 @@ const MovieModal: React.FC<MovieModalProps> = ({
     top: "10%",
     left: "50%",
     transform: "translateX(-50%)",
+    height: "90%",
     width: "95vw",
-    aspectRatio: "16 / 9",
+    aspectRatio: "9 / 16",
     backgroundcolor: "#1976d2",
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -67,6 +69,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
       left: "50%",
       transform: "translate(-50%, -50%)",
       width: "90vw",
+      aspectRatio: "9 / 16",
     },
   }));
 
@@ -76,7 +79,8 @@ const MovieModal: React.FC<MovieModalProps> = ({
     color: theme.palette.text.secondary,
     minHeight: "100px",
     padding: "20px",
-    backgroundBlendMode: "screen",
+    backgroundBlendMode: "multiply",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
   }));
 
   return (

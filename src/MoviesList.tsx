@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import MovieItem from "./MovieItem";
 import MovieModal from "./MovieModal";
 import { useSnackbar } from "./components/SnackbarProvider";
@@ -46,7 +46,7 @@ const MoviesList = ({ movies }: { movies: any[] }) => {
     <>
       <Grid container spacing={1} className="movies-list" sx={{ mt: 10 }}>
         {movies?.map((movie) => (
-          <Grid item key={movie.id} xs={12} sm={4} md={2}>
+          <Grid key={movie.id} size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
             <MovieItem movie={movie} onClick={handleOpen} />
           </Grid>
         ))}

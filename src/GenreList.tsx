@@ -62,7 +62,7 @@ const GenreList: React.FC<GenresListProps> = ({
   }
 
   return (
-    <FormControl variant="standard" sx={{ m: 1, minWidth: 120, width: "90%" }}>
+    <FormControl variant="standard" sx={{ minWidth: "120px", width: "100%" }}>
       <Select
         value={selectedGenre !== null ? selectedGenre : ""}
         onChange={(e) => {

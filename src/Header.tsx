@@ -16,7 +16,7 @@ import {
   Switch,
   Toolbar,
   InputBase,
-  Grid,
+  Grid2 as Grid,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles.css";
@@ -30,7 +30,7 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
-  marginLeft: "10px",
+
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
@@ -52,10 +52,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
+    margin: 0,
     [theme.breakpoints.up("md")]: {
       width: "20ch",
     },
@@ -135,43 +135,58 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, width: "100%", padding: 0 }}>
       <AppBar position="static" sx={{ backgroundColor: "#021920" }}>
         <Toolbar
           sx={{
-            position: "fixed",
             zIndex: 100,
             backgroundColor: "#000",
             width: "100%",
             left: 0,
+            padding: "5px 0!important",
             mixBlendMode: "luminosity",
           }}>
           <Grid
             container
-            spacing={2}
-            alignItems="center"
-            sx={{ margin: "auto", width: "calc(100vw - 35%)" }}>
-            <Grid item xs={12} sm={4}>
-              <Search>
+            spacing={1}
+            className="movies-list"
+            sx={{
+              margin: "auto",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "stretch",
+            }}>
+            <Grid
+              size={{ xs: 12, sm: 12, md: 6 }}
+              sx={{
+                marginLeft: "0",
+                width: "100%",
+              }}>
+              <Search
+                sx={{
+                  marginLeft: "0!important",
+                  width: "100%",
+                }}>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
                   placeholder="Search by title"
                   inputProps={{ "aria-label": "search" }}
+                  sx={{ marginLeft: "0!important" }}
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
               </Search>
             </Grid>
 
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 12, md: 3 }}>
               <GenresList
                 selectedGenre={selectedGenre}
                 onGenreChange={handleGenreChange}
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 12, md: 3 }}>
               <div
                 style={{
                   backgroundColor: "rgba(255, 255, 255, 0.15)",
@@ -188,7 +203,7 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
                     />
                   }
                   label="Featured"
-                  sx={{ marginLeft: "10px" }}
+                  sx={{ paddingLeft: "10px" }}
                 />
               </div>
             </Grid>
