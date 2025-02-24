@@ -21,7 +21,7 @@ interface MovieItemProps {
     backdrop_color: string;
     featured?: boolean;
     title: string;
-    genre_ids?: string;
+    genre_ids: number[]; // Correct type
     release_date: string;
   };
   onClick: (movie: MovieItemProps["movie"]) => void;

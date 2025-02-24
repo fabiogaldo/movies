@@ -62,33 +62,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const ACCESS_TOKEN = process.env.REACT_APP_API_ACCESS_TOKEN;
-const API_URL = process.env.REACT_APP_API_URL;
-
 const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [allMovies, setAllMovies] = useState<any[]>([]);
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { showSnackbar } = useSnackbar();
-
-  const handleError = (message: any) => {
-    setOpen(true);
-    showSnackbar(message, "error");
-  };
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get(`${API_URL}/movies`, {
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
-      });
+      const response = await axios.get(
+        process.env.REACT_APP_API_URL + "/movies",
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
-      setOpen(true);
-      handleError("Error loading movies.");
+      showSnackbar("Error loading videos.", "error");
+      return null;
     }
   };
 
@@ -99,6 +94,7 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       setAllMovies(data);
       setMovies(data);
     }

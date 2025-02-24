@@ -1,49 +1,50 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
   FormControl,
-  InputLabel,
   MenuItem,
   CircularProgress,
   Typography,
+  Select,
 } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
-// const StyledInputBase = styled(Select)(({ theme }) => ({
-//   color: "inherit",
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-//     transition: theme.transitions.create("width"),
-//     width: "100%",
-//     [theme.breakpoints.up("md")]: {
-//       width: "20ch",
-//     },
-//   },
-// }));
+import { useSnackbar } from "./components/SnackbarProvider";
 
 interface Genre {
   genre_id: number;
   genre_name: string;
 }
 
-const fetchGenres = async () => {
-  const { data } = await axios.get("http://localhost:8000/genres");
-  return data;
-};
-
-const GenresList = ({
-  selectedGenre,
-  onGenreChange,
-}: {
+interface GenresListProps {
   selectedGenre: number | null;
   onGenreChange: (genre: number | null) => void;
+}
+
+const GenreList: React.FC<GenresListProps> = ({
+  selectedGenre,
+  onGenreChange,
 }) => {
+  const { showSnackbar } = useSnackbar();
+
+  const fetchGenres = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/genres`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
+          },
+        }
+      );
+      return response.data.data as Genre[];
+    } catch (error: any) {
+      throw new Error("Error loading genres.");
+    }
+  };
+
   const {
     data: genres,
     isLoading,
@@ -54,15 +55,19 @@ const GenresList = ({
   });
 
   if (isLoading) return <CircularProgress />;
-  if (error) return <Typography color="error">Error loading genres</Typography>;
+
+  if (error) {
+    showSnackbar((error as Error).message, "error");
+    return null;
+  }
 
   return (
     <FormControl variant="standard" sx={{ m: 1, minWidth: 120, width: "90%" }}>
       <Select
         value={selectedGenre !== null ? selectedGenre : ""}
-        onChange={(e) =>
-          onGenreChange(e.target.value ? Number(e.target.value) : null)
-        }
+        onChange={(e) => {
+          onGenreChange(e.target.value === "" ? null : Number(e.target.value));
+        }}
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}
         sx={{
@@ -72,7 +77,7 @@ const GenresList = ({
           color: "#fff",
         }}>
         <MenuItem value="">All Genres</MenuItem>
-        {genres.map((genre: Genre) => (
+        {genres?.map((genre: Genre) => (
           <MenuItem key={genre.genre_id} value={genre.genre_id}>
             {genre.genre_name}
           </MenuItem>
@@ -82,4 +87,4 @@ const GenresList = ({
   );
 };
 
-export default GenresList;
+export default GenreList;
