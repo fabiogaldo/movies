@@ -3,12 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import GenresList from "./GenreList";
 import {
-  TextField,
   FormControlLabel,
-  Checkbox,
   CircularProgress,
   Typography,
   AppBar,
@@ -19,8 +16,10 @@ import {
   Grid,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import "./styles.css";
-import { useSnackbar } from "./components/SnackbarProvider";
+import "../styles.css";
+import { useSnackbar } from "./SnackbarProvider";
+import { fetchGenres } from "../services/api";
+import { Movie, Genre } from "../types";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -62,46 +61,46 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
+interface HeaderProps {
+  setMovies: (movies: any[]) => void;
+  movies: Movie[];
+}
+
+const Header: React.FC<HeaderProps> = ({ setMovies, movies }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
-  const [allMovies, setAllMovies] = useState<any[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [filteredGenres, setFilteredGenres] = useState<Genre[]>([]);
   const { showSnackbar } = useSnackbar();
 
-  const fetchMovies = async () => {
-    try {
-      const response = await axios.get(
-        process.env.REACT_APP_API_URL + "/movies",
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
-          },
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      showSnackbar("Error loading videos.", "error");
-      return null;
-    }
-  };
-
-  const { data } = useQuery({
-    queryKey: ["movies"],
-    queryFn: fetchMovies,
+  const {
+    data: genresData,
+    isLoading: genresLoading,
+    isError: genresIsError,
+    error: genresError,
+  } = useQuery<Genre[]>({
+    queryKey: ["genres"],
+    queryFn: fetchGenres,
   });
 
   useEffect(() => {
-    if (data) {
-      console.log(data);
-      setAllMovies(data);
-      setMovies(data);
+    if (genresData && movies) {
+      const uniqueGenreIds = new Set<number>();
+      movies.forEach((movie) => {
+        if (Array.isArray(movie.genre_ids)) {
+          movie.genre_ids.forEach((genreId) => uniqueGenreIds.add(genreId));
+        }
+      });
+
+      const filtered = genresData.filter((genre) =>
+        uniqueGenreIds.has(genre.genre_id)
+      );
+      setFilteredGenres(filtered);
     }
-  }, [data]);
+  }, [genresData, movies]);
 
   useEffect(() => {
-    let filteredMovies = allMovies;
+    let filteredMovies = [...movies];
 
     if (searchTerm) {
       filteredMovies = filteredMovies.filter((movie) =>
@@ -114,13 +113,16 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
     }
 
     if (selectedGenre !== null) {
-      filteredMovies = filteredMovies.filter((movie) =>
-        movie.genre_ids.includes(selectedGenre)
+      filteredMovies = filteredMovies.filter(
+        (movie) =>
+          movie &&
+          Array.isArray(movie.genre_ids) &&
+          movie.genre_ids.includes(selectedGenre)
       );
     }
 
     setMovies(filteredMovies);
-  }, [searchTerm, isFeatured, selectedGenre, allMovies, setMovies]);
+  }, [searchTerm, isFeatured, selectedGenre, movies, setMovies]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -134,6 +136,18 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
     setSelectedGenre(genre);
   };
 
+  if (genresLoading) return <CircularProgress />;
+
+  if (genresIsError) {
+    showSnackbar((genresError as Error).message, "error");
+    return (
+      <Typography variant="body1" color="error">
+        {genresError instanceof Error
+          ? genresError.message
+          : "Error loading genres data"}
+      </Typography>
+    );
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "#021920" }}>
@@ -169,6 +183,7 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
               <GenresList
                 selectedGenre={selectedGenre}
                 onGenreChange={handleGenreChange}
+                genres={filteredGenres}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -200,8 +215,3 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
 };
 
 export default Header;
-function err(reason: any): PromiseLike<never> {
-  return Promise.reject(
-    new Error(`Error fetching data: ${reason.message || reason}`)
-  );
-}

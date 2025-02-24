@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Grid } from "@mui/material";
 import MovieItem from "./MovieItem";
 import MovieModal from "./MovieModal";
-import { useSnackbar } from "./components/SnackbarProvider";
+import { useSnackbar } from "./SnackbarProvider";
 
 const MoviesList = ({ movies }: { movies: any[] }) => {
   const [selectedMovie, setSelectedMovie] = useState(null);

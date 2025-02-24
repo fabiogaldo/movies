@@ -9,22 +9,14 @@ import {
 import { styled } from "@mui/material/styles";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
 import { extractColors } from "extract-colors";
-import "./styles.css";
+import "../styles.css";
+import { Movie } from "../types";
 
 const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL;
 
 interface MovieItemProps {
-  movie: {
-    id: number;
-    poster_path: string;
-    backdrop_path: string;
-    backdrop_color: string;
-    featured?: boolean;
-    title: string;
-    genre_ids: number[]; // Correct type
-    release_date: string;
-  };
-  onClick: (movie: MovieItemProps["movie"]) => void;
+  movie: Movie;
+  onClick: (movie: Movie) => void;
 }
 
 const FeaturedIconWrapper = styled("div")(({ theme }) => ({
