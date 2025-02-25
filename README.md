@@ -103,21 +103,21 @@ Before running this project, you need to have the following installed:
 
 The frontend makes requests to the following endpoints:
 
-- **`GET /movies`:** Retrieves the list of movies. Expected fields:
-  - `id` (number): Movie ID.
-  - `title` (string): Movie title.
-  - `featured` (boolean): Indicates if the movie is featured.
-  - `genre_ids` (number[]): Array of genre IDs.
-  - `poster_path` (string): The path of the movie poster in the API.
-  - `backdrop_path` (string): The path of the movie backdrop in the API.
-  - `backdrop_color` (string): the dominant color of the movie.
-  - `overview` (string): The overview of the movie.
-  - `release_date` (string): the release date of the movie.
-- **`GET /genres`:** Retrieves the list of genres. Expected fields:
-  - `genre_id` (number): Genre ID.
-  - `genre_name` (string): Genre name.
-- **`GET /posters/:posterName`**: Retrieves a poster image.
-- **`GET /backdrops/:backdropName`**: Retrieves a backdrop image.
+- **`GET /movies`:** Retrieves the list of movies.
+
+  - **`POST /movies`**: Creates a new movie. The payload for creating a movie is the same as the structure returned in the GET request.
+    - Expected fields:
+      - `id` (number): Movie ID.
+      - `title` (string): Movie title.
+      - `featured` (boolean): Indicates if the movie is featured.
+      - `genre_ids` (number[]): Array of genre IDs.
+      - `poster_path` (string): The path of the movie poster in the API.
+      - `backdrop_path` (string): The path of the movie backdrop in the API.
+      - `backdrop_color` (string): the dominant color of the movie.
+      - `overview` (string): The overview of the movie.
+      - `release_date` (string): the release date of the movie.
+
+- **`GET /genres`:** Retrieves the list of genres.
 
 ## Additional Notes
 
