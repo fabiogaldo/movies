@@ -41,6 +41,10 @@ body {
   background-attachment: fixed;
 }
 
+#root {
+  padding-bottom: 24px;
+}
+
 .movie-item {
   position: relative;
   background-color: var(--surface-color);

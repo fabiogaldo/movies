@@ -8,8 +8,8 @@ import {
   FormControl,
   MenuItem,
   CircularProgress,
-  Typography,
   Select,
+  Skeleton,
 } from "@mui/material";
 import { useSnackbar } from "./components/SnackbarProvider";
 
@@ -54,7 +54,15 @@ const GenreList: React.FC<GenresListProps> = ({
     queryFn: fetchGenres,
   });
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading)
+    return (
+      <Skeleton
+        variant="rectangular"
+        width={"100%"}
+        height={48}
+        sx={{ bgcolor: "#ffffff26", borderRadius: "4px" }}
+      />
+    );
 
   if (error) {
     showSnackbar((error as Error).message, "error");

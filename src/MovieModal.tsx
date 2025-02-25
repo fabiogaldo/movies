@@ -34,6 +34,7 @@ interface MovieModalProps {
   genres: Genre[];
 }
 
+const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL;
 const IMG_BACKDROP_URL = process.env.REACT_APP_API_BACKDROP_URL;
 
 const MovieModal: React.FC<MovieModalProps> = ({
@@ -61,8 +62,8 @@ const MovieModal: React.FC<MovieModalProps> = ({
     left: "5%",
     transform: "translateX(-5%, -5%)",
     width: "90vw",
-    height: "90vh",
     aspectRatio: "9 / 16",
+    backgroundImage: `url(${IMG_POSTER_URL + (movie?.poster_path || "")})`,
     backgroundcolor: "#1976d2",
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -75,18 +76,26 @@ const MovieModal: React.FC<MovieModalProps> = ({
       left: "50%",
       transform: "translate(-50%, -50%)",
       width: "90vw",
-      aspectRatio: "9 / 16",
+      aspectRatio: "16 / 9",
+      backgroundImage: `url(${
+        IMG_BACKDROP_URL + (movie?.backdrop_path || "")
+      })`,
     },
   }));
 
   const StyledPaper = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body1,
+    fontSize: "1rem!important",
     textAlign: "right",
     color: theme.palette.text.secondary,
     minHeight: "100px",
+    maxHeight: "30vh",
+    overflow: "auto",
     padding: "20px",
     backgroundBlendMode: "multiply",
     backgroundColor: "rgba(255, 255, 255, 0.7)",
+    [theme.breakpoints.up("sm")]: {
+      ...theme.typography.body1,
+    },
   }));
 
   return (
@@ -97,13 +106,11 @@ const MovieModal: React.FC<MovieModalProps> = ({
         onClick={handleClose}
         aria-labelledby="movie-modal-title"
         aria-describedby="movie-modal-description"
-        sx={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}>
+        sx={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}>
         <StyledBox
           style={{
             backgroundColor: imageColor,
-            backgroundImage: `url(${
-              IMG_BACKDROP_URL + (movie?.poster_path || "")
-            })`,
+
             backgroundBlendMode: "multiply",
           }}>
           {movie && (
@@ -118,9 +125,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
               </Grid>
               <Grid size={{ xs: 12 }}>
                 <StyledPaper elevation={3}>
-                  <Typography id="movie-modal-description" variant="h6">
-                    <em>{movie.overview}</em>
-                  </Typography>
+                  <em>{movie.overview}</em>
                 </StyledPaper>
               </Grid>
               {movie.genre_ids && (

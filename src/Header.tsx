@@ -17,6 +17,7 @@ import {
   Toolbar,
   InputBase,
   Grid2 as Grid,
+  Skeleton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles.css";
@@ -29,7 +30,6 @@ const Search = styled("div")(({ theme }) => ({
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginRight: theme.spacing(2),
 
   width: "100%",
   [theme.breakpoints.up("sm")]: {
@@ -87,7 +87,7 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
     }
   };
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["movies"],
     queryFn: fetchMovies,
   });
@@ -163,50 +163,77 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
                   marginLeft: "0",
                   width: "100%",
                 }}>
-                <Search
-                  sx={{
-                    marginLeft: "0!important",
-                    width: "100%",
-                  }}>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Search by title"
-                    inputProps={{ "aria-label": "search" }}
-                    sx={{ marginLeft: "0!important" }}
-                    value={searchTerm}
-                    onChange={handleSearchChange}
+                {isLoading ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={48}
+                    sx={{ bgcolor: "#ffffff26", borderRadius: "4px" }}
                   />
-                </Search>
+                ) : (
+                  <Search
+                    sx={{
+                      marginLeft: "0!important",
+                      width: "100%",
+                    }}>
+                    <SearchIconWrapper>
+                      <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                      placeholder="Search by title"
+                      inputProps={{ "aria-label": "search" }}
+                      sx={{ marginLeft: "0!important" }}
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                    />
+                  </Search>
+                )}
               </Grid>
 
               <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-                <GenresList
-                  selectedGenre={selectedGenre}
-                  onGenreChange={handleGenreChange}
-                />
+                {isLoading ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={48}
+                    sx={{ bgcolor: "#ffffff26", borderRadius: "4px" }}
+                  />
+                ) : (
+                  <GenresList
+                    selectedGenre={selectedGenre}
+                    onGenreChange={handleGenreChange}
+                  />
+                )}
               </Grid>
               <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-                <div
-                  style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.15)",
-                    borderRadius: "4px",
-                    padding: "8px 8px",
-                    color: "#fff",
-                  }}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        size="small"
-                        checked={isFeatured}
-                        onChange={handleFeaturedChange}
-                      />
-                    }
-                    label="Featured"
-                    sx={{ paddingLeft: "10px" }}
+                {isLoading ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={48}
+                    sx={{ bgcolor: "#ffffff26", borderRadius: "4px" }}
                   />
-                </div>
+                ) : (
+                  <div
+                    style={{
+                      backgroundColor: "rgba(255, 255, 255, 0.15)",
+                      borderRadius: "4px",
+                      padding: "8px 8px",
+                      color: "#fff",
+                    }}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          size="small"
+                          checked={isFeatured}
+                          onChange={handleFeaturedChange}
+                        />
+                      }
+                      label="Featured"
+                      sx={{ paddingLeft: "10px" }}
+                    />
+                  </div>
+                )}
               </Grid>
             </Grid>
           </Toolbar>
