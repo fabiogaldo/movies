@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import { Modal, Box, Typography, Grid, Paper, Chip } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Typography,
+  Grid2 as Grid,
+  Paper,
+  Chip,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Height } from "@mui/icons-material";
 interface Genre {
   id: number;
   name: string;
@@ -51,17 +57,17 @@ const MovieModal: React.FC<MovieModalProps> = ({
 
   const StyledBox = styled(Box)(({ theme }) => ({
     position: "absolute",
-    top: "10%",
-    left: "50%",
-    transform: "translateX(-50%)",
-    height: "90%",
-    width: "95vw",
+    top: "5%",
+    left: "5%",
+    transform: "translateX(-5%, -5%)",
+    width: "90vw",
+    height: "90vh",
     aspectRatio: "9 / 16",
     backgroundcolor: "#1976d2",
     backgroundPosition: "center",
     backgroundSize: "cover",
     mixBlendMode: "screen",
-
+    padding: "20px",
     display: "flex",
     flexDirection: "column",
     [theme.breakpoints.up("sm")]: {
@@ -88,8 +94,10 @@ const MovieModal: React.FC<MovieModalProps> = ({
       <Modal
         open={open}
         onClose={handleClose}
+        onClick={handleClose}
         aria-labelledby="movie-modal-title"
-        aria-describedby="movie-modal-description">
+        aria-describedby="movie-modal-description"
+        sx={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}>
         <StyledBox
           style={{
             backgroundColor: imageColor,
@@ -99,8 +107,8 @@ const MovieModal: React.FC<MovieModalProps> = ({
             backgroundBlendMode: "multiply",
           }}>
           {movie && (
-            <Grid container spacing={2} sx={{ color: "white", height: "100%" }}>
-              <Grid item xs={12}>
+            <Grid container spacing={0} sx={{ color: "white", height: "100%" }}>
+              <Grid size={{ xs: 12 }}>
                 <Typography id="movie-modal-title" variant="h4" component="h2">
                   <strong>{movie.title}</strong>{" "}
                   <span style={{ fontSize: "0.7em" }}>
@@ -108,7 +116,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
                   </span>
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <StyledPaper elevation={3}>
                   <Typography id="movie-modal-description" variant="h6">
                     <em>{movie.overview}</em>
@@ -116,13 +124,16 @@ const MovieModal: React.FC<MovieModalProps> = ({
                 </StyledPaper>
               </Grid>
               {movie.genre_ids && (
-                <Grid item xs={12} sx={{ mt: "auto" }}>
+                <Grid size={{ xs: 12 }} sx={{ mt: "auto" }}>
                   {getGenreNames(movie.genre_ids, genres).map((name: any) => (
                     <Chip
                       key={name}
                       label={name}
-                      sx={{ margin: "2px" }}
-                      color={"warning"}
+                      sx={{
+                        margin: "2px",
+                        backgroundColor: (theme) => theme.palette.primary.main,
+                        color: (theme) => theme.palette.common.white,
+                      }}
                     />
                   ))}
                 </Grid>

@@ -3,17 +3,14 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import MovieItem from "./MovieItem";
 import MovieModal from "./MovieModal";
-import { useSnackbar } from "./components/SnackbarProvider";
 
 const MoviesList = ({ movies }: { movies: any[] }) => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [open, setOpen] = useState(false);
-  const { showSnackbar } = useSnackbar();
 
   const handleOpen = (movie: any) => {
     setSelectedMovie(movie);
     setOpen(true);
-    showSnackbar("Movie selected: " + movie.title, "success");
   };
 
   const handleClose = () => {
@@ -44,7 +41,7 @@ const MoviesList = ({ movies }: { movies: any[] }) => {
   ];
   return (
     <>
-      <Grid container spacing={1} className="movies-list" sx={{ mt: 10 }}>
+      <Grid container spacing={1} className="movies-list">
         {movies?.map((movie) => (
           <Grid key={movie.id} size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
             <MovieItem movie={movie} onClick={handleOpen} />

@@ -135,82 +135,84 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, width: "100%", padding: 0 }}>
-      <AppBar position="static" sx={{ backgroundColor: "#021920" }}>
-        <Toolbar
-          sx={{
-            zIndex: 100,
-            backgroundColor: "#000",
-            width: "100%",
-            left: 0,
-            padding: "5px 0!important",
-            mixBlendMode: "luminosity",
-          }}>
-          <Grid
-            container
-            spacing={1}
-            className="movies-list"
+    <div style={{ position: "sticky", top: 0, zIndex: 100 }}>
+      <Box sx={{ flexGrow: 1, width: "100%", padding: 0 }}>
+        <AppBar position="static" sx={{ backgroundColor: "#021920" }}>
+          <Toolbar
             sx={{
-              margin: "auto",
+              zIndex: 100,
+              backgroundColor: "#000",
               width: "100%",
-              justifyContent: "space-between",
-              alignItems: "stretch",
+              left: 0,
+              padding: "5px 0!important",
+              mixBlendMode: "luminosity",
             }}>
             <Grid
-              size={{ xs: 12, sm: 12, md: 6 }}
+              container
+              spacing={1}
+              className="movies-list"
               sx={{
-                marginLeft: "0",
+                margin: "auto",
                 width: "100%",
+                justifyContent: "space-between",
+                alignItems: "stretch",
               }}>
-              <Search
+              <Grid
+                size={{ xs: 12, sm: 12, md: 6 }}
                 sx={{
-                  marginLeft: "0!important",
+                  marginLeft: "0",
                   width: "100%",
                 }}>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search by title"
-                  inputProps={{ "aria-label": "search" }}
-                  sx={{ marginLeft: "0!important" }}
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-              </Search>
-            </Grid>
+                <Search
+                  sx={{
+                    marginLeft: "0!important",
+                    width: "100%",
+                  }}>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search by title"
+                    inputProps={{ "aria-label": "search" }}
+                    sx={{ marginLeft: "0!important" }}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                </Search>
+              </Grid>
 
-            <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-              <GenresList
-                selectedGenre={selectedGenre}
-                onGenreChange={handleGenreChange}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-              <div
-                style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.15)",
-                  borderRadius: "4px",
-                  padding: "8px 8px",
-                  color: "#fff",
-                }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      size="small"
-                      checked={isFeatured}
-                      onChange={handleFeaturedChange}
-                    />
-                  }
-                  label="Featured"
-                  sx={{ paddingLeft: "10px" }}
+              <Grid size={{ xs: 12, sm: 12, md: 3 }}>
+                <GenresList
+                  selectedGenre={selectedGenre}
+                  onGenreChange={handleGenreChange}
                 />
-              </div>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 12, md: 3 }}>
+                <div
+                  style={{
+                    backgroundColor: "rgba(255, 255, 255, 0.15)",
+                    borderRadius: "4px",
+                    padding: "8px 8px",
+                    color: "#fff",
+                  }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        size="small"
+                        checked={isFeatured}
+                        onChange={handleFeaturedChange}
+                      />
+                    }
+                    label="Featured"
+                    sx={{ paddingLeft: "10px" }}
+                  />
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
-    </Box>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </div>
   );
 };
 
