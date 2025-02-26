@@ -73,7 +73,7 @@ const Header = ({ setMovies }: { setMovies: (movies: any[]) => void }) => {
   const fetchMovies = async () => {
     try {
       const response = await axios.get(
-        process.env.REACT_APP_API_URL + "/movies",
+        process.env.REACT_APP_API_URL + "/movies?sort[0]=title:asc",
         {
           headers: {
             Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,

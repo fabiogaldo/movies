@@ -10,9 +10,10 @@ import {
   Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useGenres } from "./contexts/GenresContext";
 interface Genre {
-  id: number;
-  name: string;
+  genre_id: number;
+  genre_name: string;
 }
 
 interface Movie {
@@ -31,7 +32,6 @@ interface MovieModalProps {
   movie?: Movie;
   open: boolean;
   handleClose: () => void;
-  genres: Genre[];
 }
 
 const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL || "";
@@ -41,19 +41,17 @@ const MovieModal: React.FC<MovieModalProps> = ({
   movie,
   open,
   handleClose,
-  genres,
 }) => {
-  const imageSrc = `${IMG_POSTER_URL + movie?.poster_path}`;
+  const { genres } = useGenres();
 
-  const getGenreNames = (genreIds: any, genres: Genre[]) => {
-    genreIds = genreIds.replace(/'/g, '"');
-    genreIds = JSON.parse(genreIds);
-    return genreIds
-      .map(
-        (id: number): string | undefined =>
-          genres.find((genre: Genre) => genre.id === id)?.name
+  const getGenreNames = (genreIds: number[], genres: Genre[]) => {
+    return JSON.parse(genreIds.toString().replace(/'/g, '"'))
+      .map((id: number): Genre | undefined =>
+        genres.find((genre: Genre) => genre.genre_id === id)
       )
-      .filter((name: string | undefined): name is string => name !== undefined);
+      .filter(
+        (genre: Genre | undefined): genre is Genre => genre !== undefined
+      );
   };
 
   const StyledBox = styled(Box)(({ theme }) => ({
@@ -97,8 +95,6 @@ const MovieModal: React.FC<MovieModalProps> = ({
       ...theme.typography.body1,
     },
   }));
-  //alert(movie?.backdrop_color);
-  //alert(imageColor);
 
   return (
     <>
@@ -127,17 +123,20 @@ const MovieModal: React.FC<MovieModalProps> = ({
               </Grid>
               {movie.genre_ids && (
                 <Grid size={{ xs: 12 }} sx={{ mt: "auto" }}>
-                  {getGenreNames(movie.genre_ids, genres).map((name: any) => (
-                    <Chip
-                      key={name}
-                      label={name}
-                      sx={{
-                        margin: "2px",
-                        backgroundColor: (theme) => theme.palette.primary.main,
-                        color: (theme) => theme.palette.common.white,
-                      }}
-                    />
-                  ))}
+                  {getGenreNames(movie.genre_ids as number[], genres).map(
+                    (genre: Genre) => (
+                      <Chip
+                        key={genre.genre_id}
+                        label={genre.genre_name}
+                        sx={{
+                          margin: "2px",
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
+                          color: (theme) => theme.palette.common.white,
+                        }}
+                      />
+                    )
+                  )}
                 </Grid>
               )}
             </Grid>

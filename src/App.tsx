@@ -8,6 +8,7 @@ import theme from "./themes/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Container } from "@mui/material";
 import { SnackbarProvider } from "./components/SnackbarProvider";
+import { GenresProvider } from "./contexts/GenresContext";
 
 interface Movie {
   id: number;
@@ -26,10 +27,12 @@ export default function App() {
       <SnackbarProvider>
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
-          <Container>
-            <Header setMovies={setMovies} />
-            <MoviesList movies={movies} />
-          </Container>
+          <GenresProvider>
+            <Container>
+              <Header setMovies={setMovies} />
+              <MoviesList movies={movies} />
+            </Container>
+          </GenresProvider>
         </QueryClientProvider>
       </SnackbarProvider>
     </ThemeProvider>

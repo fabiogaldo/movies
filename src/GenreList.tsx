@@ -1,22 +1,6 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import {
-  FormControl,
-  MenuItem,
-  CircularProgress,
-  Select,
-  Skeleton,
-} from "@mui/material";
-import { useSnackbar } from "./components/SnackbarProvider";
-
-interface Genre {
-  genre_id: number;
-  genre_name: string;
-}
+import React from "react";
+import { FormControl, MenuItem, Select, Skeleton } from "@mui/material";
+import { useGenres } from "./contexts/GenresContext";
 
 interface GenresListProps {
   selectedGenre: number | null;
@@ -27,32 +11,7 @@ const GenreList: React.FC<GenresListProps> = ({
   selectedGenre,
   onGenreChange,
 }) => {
-  const { showSnackbar } = useSnackbar();
-
-  const fetchGenres = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/genres`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
-          },
-        }
-      );
-      return response.data.data as Genre[];
-    } catch (error: any) {
-      throw new Error("Error loading genres.");
-    }
-  };
-
-  const {
-    data: genres,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["genres"],
-    queryFn: fetchGenres,
-  });
+  const { genres, isLoading, error } = useGenres();
 
   if (isLoading)
     return (
@@ -65,7 +24,6 @@ const GenreList: React.FC<GenresListProps> = ({
     );
 
   if (error) {
-    showSnackbar((error as Error).message, "error");
     return null;
   }
 
@@ -85,7 +43,7 @@ const GenreList: React.FC<GenresListProps> = ({
           color: "#fff",
         }}>
         <MenuItem value="">All Genres</MenuItem>
-        {genres?.map((genre: Genre) => (
+        {genres?.map((genre) => (
           <MenuItem key={genre.genre_id} value={genre.genre_id}>
             {genre.genre_name}
           </MenuItem>
