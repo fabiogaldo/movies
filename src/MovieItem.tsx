@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   Card,
   CardMedia,
@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
-import { extractColors } from "extract-colors";
 import "./styles.css";
 
 const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL;
@@ -50,24 +49,6 @@ const MoviePosterWrapper = styled("div")(({ theme }) => ({
 
 export default function MovieItem({ movie, onClick }: MovieItemProps) {
   const movieImageRef = useRef<HTMLImageElement>(null);
-  const [bgColor, setBgColor] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (movieImageRef.current) {
-      extractColors(movieImageRef.current.src, {})
-        .then((colors) => {
-          if (colors.length > 0) {
-            //alert(colors);
-            setBgColor(colors[0].hex);
-            movie.backdrop_color = colors[0].hex;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [bgColor]);
-  //alert(movie.backdrop_color);
   return (
     <Card
       className="movie-item"

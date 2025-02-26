@@ -10,7 +10,6 @@ import {
   Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { extractColors } from "extract-colors";
 interface Genre {
   id: number;
   name: string;
@@ -44,7 +43,8 @@ const MovieModal: React.FC<MovieModalProps> = ({
   handleClose,
   genres,
 }) => {
-  const [bgColor, setBgColor] = useState("#055264");
+  const imageSrc = `${IMG_POSTER_URL + movie?.poster_path}`;
+
   const getGenreNames = (genreIds: any, genres: Genre[]) => {
     genreIds = genreIds.replace(/'/g, '"');
     genreIds = JSON.parse(genreIds);
@@ -56,32 +56,6 @@ const MovieModal: React.FC<MovieModalProps> = ({
       .filter((name: string | undefined): name is string => name !== undefined);
   };
 
-  useEffect(() => {
-    const imageSrc = `${IMG_POSTER_URL + movie?.poster_path}`;
-    alert(imageSrc);
-    if (imageSrc) {
-      () =>
-        extractColors(imageSrc, {
-          pixels: 640,
-          distance: 0.22,
-          colorValidator: (red, green, blue, alpha = 255) => alpha > 250,
-          saturationDistance: 0.5,
-          lightnessDistance: 0.5,
-          hueDistance: 0.05,
-        })
-          .then((colors) => {
-            alert(colors);
-            if (colors.length > 0) {
-              setBgColor(colors[0].hex);
-              alert(bgColor);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    }
-  }, [bgColor]);
-
   const StyledBox = styled(Box)(({ theme }) => ({
     position: "absolute",
     top: "5%",
@@ -89,6 +63,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
     transform: "translateX(-5%, -5%)",
     width: "90vw",
     aspectRatio: "9 / 16",
+    backgroundColor: movie?.backdrop_color,
     backgroundImage: `url(${IMG_POSTER_URL + (movie?.poster_path || "")})`,
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -124,6 +99,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
   }));
   //alert(movie?.backdrop_color);
   //alert(imageColor);
+
   return (
     <>
       <Modal
@@ -133,11 +109,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
         aria-labelledby="movie-modal-title"
         aria-describedby="movie-modal-description"
         sx={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}>
-        <StyledBox
-          style={{
-            backgroundColor: bgColor,
-            backgroundBlendMode: "lighten",
-          }}>
+        <StyledBox>
           {movie && (
             <Grid container spacing={0} sx={{ color: "white", height: "100%" }}>
               <Grid size={{ xs: 12 }}>
