@@ -67,7 +67,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
     backgroundImage: `url(${IMG_POSTER_URL + (movie?.poster_path || "")})`,
     backgroundPosition: "center",
     backgroundSize: "cover",
-    mixBlendMode: "screen",
+    backgroundBlendMode: "multiply",
     padding: "20px",
     display: "flex",
     flexDirection: "column",
