@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Box,
@@ -10,6 +10,7 @@ import {
   Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { extractColors } from "extract-colors";
 interface Genre {
   id: number;
   name: string;
@@ -34,8 +35,8 @@ interface MovieModalProps {
   genres: Genre[];
 }
 
-const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL;
-const IMG_BACKDROP_URL = process.env.REACT_APP_API_BACKDROP_URL;
+const IMG_POSTER_URL = process.env.REACT_APP_API_POSTER_URL || "";
+const IMG_BACKDROP_URL = process.env.REACT_APP_API_BACKDROP_URL || "";
 
 const MovieModal: React.FC<MovieModalProps> = ({
   movie,
@@ -43,6 +44,7 @@ const MovieModal: React.FC<MovieModalProps> = ({
   handleClose,
   genres,
 }) => {
+  const [bgColor, setBgColor] = useState("#055264");
   const getGenreNames = (genreIds: any, genres: Genre[]) => {
     genreIds = genreIds.replace(/'/g, '"');
     genreIds = JSON.parse(genreIds);
@@ -54,7 +56,31 @@ const MovieModal: React.FC<MovieModalProps> = ({
       .filter((name: string | undefined): name is string => name !== undefined);
   };
 
-  const imageColor = movie?.backdrop_color || "#1976d2";
+  useEffect(() => {
+    const imageSrc = `${IMG_POSTER_URL + movie?.poster_path}`;
+    alert(imageSrc);
+    if (imageSrc) {
+      () =>
+        extractColors(imageSrc, {
+          pixels: 640,
+          distance: 0.22,
+          colorValidator: (red, green, blue, alpha = 255) => alpha > 250,
+          saturationDistance: 0.5,
+          lightnessDistance: 0.5,
+          hueDistance: 0.05,
+        })
+          .then((colors) => {
+            alert(colors);
+            if (colors.length > 0) {
+              setBgColor(colors[0].hex);
+              alert(bgColor);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    }
+  }, [bgColor]);
 
   const StyledBox = styled(Box)(({ theme }) => ({
     position: "absolute",
@@ -64,7 +90,6 @@ const MovieModal: React.FC<MovieModalProps> = ({
     width: "90vw",
     aspectRatio: "9 / 16",
     backgroundImage: `url(${IMG_POSTER_URL + (movie?.poster_path || "")})`,
-    backgroundcolor: "#1976d2",
     backgroundPosition: "center",
     backgroundSize: "cover",
     mixBlendMode: "screen",
@@ -97,7 +122,8 @@ const MovieModal: React.FC<MovieModalProps> = ({
       ...theme.typography.body1,
     },
   }));
-
+  //alert(movie?.backdrop_color);
+  //alert(imageColor);
   return (
     <>
       <Modal
@@ -109,9 +135,8 @@ const MovieModal: React.FC<MovieModalProps> = ({
         sx={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}>
         <StyledBox
           style={{
-            backgroundColor: imageColor,
-
-            backgroundBlendMode: "multiply",
+            backgroundColor: bgColor,
+            backgroundBlendMode: "lighten",
           }}>
           {movie && (
             <Grid container spacing={0} sx={{ color: "white", height: "100%" }}>
